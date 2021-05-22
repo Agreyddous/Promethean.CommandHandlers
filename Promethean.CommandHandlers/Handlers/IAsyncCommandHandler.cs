@@ -1,13 +1,14 @@
+using System.Threading.Tasks;
 using Promethean.CommandHandlers.Commands;
 using Promethean.CommandHandlers.Commands.Results;
 using Promethean.Notifications;
 
 namespace Promethean.CommandHandlers.Handlers
 {
-	public interface ICommandHandler<TCommand, TCommandResult> : INotifiable
+	public interface IAsyncCommandHandler<TCommand, TCommandResult> : INotifiable
 		where TCommand : ICommand
 		where TCommandResult : ICommandResult
 	{
-		TCommandResult Handle(TCommand command);
+		Task<TCommandResult> Handle(TCommand command);
 	}
 }

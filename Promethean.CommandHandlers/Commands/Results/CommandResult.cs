@@ -6,7 +6,7 @@ namespace Promethean.CommandHandlers.Commands.Results
 {
 	public class CommandResult : Notifiable, ICommandResult
 	{
-		internal CommandResult() => Code = HttpStatusCode.InternalServerError;
+		public CommandResult() => Code = HttpStatusCode.InternalServerError;
 		public CommandResult(HttpStatusCode code, IReadOnlyCollection<Notification> notifications = null)
 		{
 			Code = code;

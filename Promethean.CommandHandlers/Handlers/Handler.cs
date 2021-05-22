@@ -3,8 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Promethean.CommandHandlers.Commands;
 using Promethean.CommandHandlers.Commands.Results;
-using Promethean.Logs.Contracts;
-using Promethean.Notifications;
+using Promethean.Logs.Services;
 
 namespace Promethean.CommandHandlers.Handlers
 {
@@ -24,14 +23,26 @@ namespace Promethean.CommandHandlers.Handlers
 			where TCommandResult : ICommandResult, new()
 		{
 			TCommandResult result = new TCommandResult();
+			bool async = false;
 
+			IAsyncCommandHandler<TCommand, TCommandResult> asyncHandler = null;
 			ICommandHandler<TCommand, TCommandResult> handler = _serviceProvider.GetService(typeof(ICommandHandler<TCommand, TCommandResult>)) as ICommandHandler<TCommand, TCommandResult>;
+
+			if (handler == null)
+			{
+				async = true;
+				asyncHandler = _serviceProvider.GetService(typeof(IAsyncCommandHandler<TCommand, TCommandResult>)) as IAsyncCommandHandler<TCommand, TCommandResult>;
+			}
 
 			try
 			{
 				_logService.Log<ICommandHandler<TCommand, TCommandResult>>("Input", nameof(handler.Handle), new { Input = command }, LogLevel.Debug);
 
-				result = await handler.Handle(command);
+				if (!async)
+					result = handler.Handle(command);
+
+				else
+					result = await asyncHandler.Handle(command);
 			}
 			catch (Exception exception)
 			{
