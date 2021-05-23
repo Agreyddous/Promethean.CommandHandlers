@@ -34,7 +34,7 @@ namespace Promethean.CommandHandlers.Tests.DependencyInjection
 		[TestMethod("Handle command and result that have a valid handler registered")]
 		public async Task HandleValidRegisteredCommandAndResult()
 		{
-			IHandler handler = GetService<IHandler>();
+			IHandler handler = _getService<IHandler>();
 
 			TestCommandResult result = await handler.Handle<SuccessTestCommand, TestCommandResult>(new SuccessTestCommand());
 
@@ -46,7 +46,7 @@ namespace Promethean.CommandHandlers.Tests.DependencyInjection
 		[TestMethod("Handle command and result that have a valid async handler registered")]
 		public async Task HandleValidRegisteredAsyncCommandAndResult()
 		{
-			IHandler handler = GetService<IHandler>();
+			IHandler handler = _getService<IHandler>();
 
 			TestCommandResult result = await handler.Handle<AsyncSuccessTestCommand, TestCommandResult>(new AsyncSuccessTestCommand());
 
@@ -58,7 +58,7 @@ namespace Promethean.CommandHandlers.Tests.DependencyInjection
 		[TestMethod("Handle command and result that don't have a valid sync or async handler registered")]
 		public async Task HandleNotRegisteredCommandAndResult()
 		{
-			IHandler handler = GetService<IHandler>();
+			IHandler handler = _getService<IHandler>();
 
 			TestCommandResult result = await handler.Handle<NoHandlerTestCommand, TestCommandResult>(new NoHandlerTestCommand());
 
@@ -66,6 +66,6 @@ namespace Promethean.CommandHandlers.Tests.DependencyInjection
 			Assert.AreEqual(HttpStatusCode.InternalServerError, result.Code);
 		}
 
-		private TService GetService<TService>() => _serviceScope.ServiceProvider.GetService<TService>();
+		private TService _getService<TService>() => _serviceScope.ServiceProvider.GetService<TService>();
 	}
 }
