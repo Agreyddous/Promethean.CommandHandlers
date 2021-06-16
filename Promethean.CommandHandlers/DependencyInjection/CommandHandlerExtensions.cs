@@ -4,13 +4,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Promethean.CommandHandlers.Handlers;
 using System.Reflection;
 using Promethean.CommandHandlers.Handlers.Contracts;
+using System.Net;
 
 namespace Promethean.CommandHandlers.DependencyInjection
 {
 	public static class CommandHandlerExtensions
 	{
-		public static IServiceCollection AddCommandHandlers(this IServiceCollection serviceCollection)
+		public static IServiceCollection AddCommandHandlers(this IServiceCollection serviceCollection, HttpStatusCode invalidHandlerDefaultCode = HttpStatusCode.BadRequest)
 		{
+			Handler.InvalidHandlerDefaultCode = invalidHandlerDefaultCode;
 			serviceCollection.AddScoped<IHandler, Handler>();
 
 			foreach (Type existingType in AppDomain.CurrentDomain.GetAssemblies().Union(Assembly.GetEntryAssembly().GetReferencedAssemblies().Select(Assembly.Load)).SelectMany(assembly => assembly.GetTypes()))

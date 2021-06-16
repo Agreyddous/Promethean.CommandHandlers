@@ -16,5 +16,11 @@ namespace Promethean.CommandHandlers.Commands.Results
 		}
 
 		public HttpStatusCode Code { get; private set; }
+
+		void ICommandResult.Populate(HttpStatusCode code, IReadOnlyCollection<INotification> notifications)
+		{
+			Code = code;
+			AddNotifications(notifications);
+		}
 	}
 }

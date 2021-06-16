@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,6 +44,18 @@ namespace Promethean.CommandHandlers.Tests.DependencyInjection
 			Assert.AreEqual(0, result.Notifications.Count);
 		}
 
+		[TestMethod("Handle the Invalid Command, should return the Invalid Command Code (In this case, Bad Request) and have one notification")]
+		public async Task HandleInvalidCommand()
+		{
+			IHandler handler = _getService<IHandler>();
+
+			TestCommandResult result = await handler.Handle<InvalidTestCommand, TestCommandResult>(new InvalidTestCommand());
+
+			Assert.IsNotNull(result);
+			Assert.AreEqual(HttpStatusCode.BadRequest, result.Code);
+			Assert.AreEqual(1, result.Notifications.Count);
+		}
+
 		[TestMethod("Handle command and result that have a valid async handler registered")]
 		public async Task HandleValidRegisteredAsyncCommandAndResult()
 		{
@@ -55,15 +68,12 @@ namespace Promethean.CommandHandlers.Tests.DependencyInjection
 			Assert.AreEqual(0, result.Notifications.Count);
 		}
 
-		[TestMethod("Handle command and result that don't have a valid sync or async handler registered")]
+		[TestMethod("Handle command and result that don't have a valid sync or async handler registered, should throw and ArgumentNullException")]
 		public async Task HandleNotRegisteredCommandAndResult()
 		{
 			IHandler handler = _getService<IHandler>();
 
-			TestCommandResult result = await handler.Handle<NoHandlerTestCommand, TestCommandResult>(new NoHandlerTestCommand());
-
-			Assert.IsNotNull(result);
-			Assert.AreEqual(HttpStatusCode.InternalServerError, result.Code);
+			await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () => await handler.Handle<NoHandlerTestCommand, TestCommandResult>(new NoHandlerTestCommand()));
 		}
 
 		private TService _getService<TService>() => _serviceScope.ServiceProvider.GetService<TService>();

@@ -1,17 +1,23 @@
 using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Promethean.CommandHandlers.Commands.Contracts;
 using Promethean.CommandHandlers.Commands.Results.Contracts;
+using Promethean.CommandHandlers.Enums;
 using Promethean.CommandHandlers.Handlers.Contracts;
 using Promethean.Logs.Services.Contracts;
+using Promethean.Notifications.Contracts;
 
 namespace Promethean.CommandHandlers.Handlers
 {
-	public class Handler : IHandler
+	public sealed class Handler : IHandler
 	{
 		private readonly IServiceProvider _serviceProvider;
 		private readonly ILogService _logService;
+
+		internal static HttpStatusCode InvalidHandlerDefaultCode = HttpStatusCode.BadRequest;
 
 		public Handler(IServiceProvider serviceProvider, ILogService logService)
 		{
@@ -23,7 +29,6 @@ namespace Promethean.CommandHandlers.Handlers
 			where TCommand : ICommand
 			where TCommandResult : ICommandResult, new()
 		{
-			TCommandResult result = new TCommandResult();
 			bool async = false;
 
 			IAsyncCommandHandler<TCommand, TCommandResult> asyncHandler = null;
@@ -35,15 +40,26 @@ namespace Promethean.CommandHandlers.Handlers
 				asyncHandler = _serviceProvider.GetService(typeof(IAsyncCommandHandler<TCommand, TCommandResult>)) as IAsyncCommandHandler<TCommand, TCommandResult>;
 			}
 
+			if (handler == null && asyncHandler == null)
+				throw new ArgumentNullException(nameof(handler));
+
+			TCommandResult result = new TCommandResult();
+
 			try
 			{
-				_logService.Log<ICommandHandler<TCommand, TCommandResult>>("Input", nameof(handler.Handle), new { Input = command }, LogLevel.Debug);
+				_logService.Log<ICommandHandler<TCommand, TCommandResult>>(nameof(EOperations.Input), nameof(handler.Handle), new { Input = command }, LogLevel.Debug);
 
-				if (!async)
-					result = handler.Handle(command);
+				result = async ? await asyncHandler.Handle(command) : handler.Handle(command);
 
-				else
-					result = await asyncHandler.Handle(command);
+				if (result == null)
+				{
+					result = new TCommandResult();
+
+					IReadOnlyCollection<INotification> notifications = async ? asyncHandler.Notifications : handler.Notifications;
+
+					if (notifications.Count > 0)
+						result.Populate(InvalidHandlerDefaultCode, notifications);
+				}
 			}
 			catch (Exception exception)
 			{
@@ -51,7 +67,7 @@ namespace Promethean.CommandHandlers.Handlers
 			}
 			finally
 			{
-				_logService.Log<ICommandHandler<TCommand, TCommandResult>>("Output", nameof(handler.Handle), new { Output = result }, LogLevel.Debug);
+				_logService.Log<ICommandHandler<TCommand, TCommandResult>>(nameof(EOperations.Output), nameof(handler.Handle), new { Output = result }, LogLevel.Debug);
 			}
 
 			return result;
