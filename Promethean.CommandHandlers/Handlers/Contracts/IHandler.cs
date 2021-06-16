@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using Promethean.CommandHandlers.Commands;
-using Promethean.CommandHandlers.Commands.Results;
+using Promethean.CommandHandlers.Commands.Contracts;
+using Promethean.CommandHandlers.Commands.Results.Contracts;
 
-namespace Promethean.CommandHandlers.Handlers
+namespace Promethean.CommandHandlers.Handlers.Contracts
 {
 	public interface IHandler
 	{

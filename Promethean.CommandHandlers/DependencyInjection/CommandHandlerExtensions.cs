@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Promethean.CommandHandlers.Handlers;
 using System.Reflection;
+using Promethean.CommandHandlers.Handlers.Contracts;
 
 namespace Promethean.CommandHandlers.DependencyInjection
 {

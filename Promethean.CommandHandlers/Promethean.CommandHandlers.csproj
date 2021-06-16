@@ -5,8 +5,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Promethean.Logs" Version="1.0.1" />
-		<PackageReference Include="Promethean.Notifications" Version="1.0.2" />
+		<PackageReference Include="Promethean.Logs" Version="1.0.2" />
+		<PackageReference Include="Promethean.Notifications" Version="1.0.3" />
 	</ItemGroup>
 
 	<PropertyGroup>

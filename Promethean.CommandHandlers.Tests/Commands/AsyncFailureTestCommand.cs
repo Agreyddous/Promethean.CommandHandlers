@@ -1,4 +1,4 @@
-using Promethean.CommandHandlers.Commands;
+using Promethean.CommandHandlers.Commands.Contracts;
 
 namespace Promethean.CommandHandlers.Tests.Commands
 {

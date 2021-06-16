@@ -1,6 +1,6 @@
 using System.Net;
 using System.Threading.Tasks;
-using Promethean.CommandHandlers.Handlers;
+using Promethean.CommandHandlers.Handlers.Contracts;
 using Promethean.CommandHandlers.Tests.Commands;
 using Promethean.CommandHandlers.Tests.Commands.Results;
 using Promethean.Notifications;

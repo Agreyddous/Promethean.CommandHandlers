@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Promethean.CommandHandlers.Commands.Contracts;
 using Promethean.Notifications;
 using Promethean.Notifications.Validators;
 

@@ -1,9 +1,10 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Promethean.CommandHandlers.Commands;
-using Promethean.CommandHandlers.Commands.Results;
-using Promethean.Logs.Services;
+using Promethean.CommandHandlers.Commands.Contracts;
+using Promethean.CommandHandlers.Commands.Results.Contracts;
+using Promethean.CommandHandlers.Handlers.Contracts;
+using Promethean.Logs.Services.Contracts;
 
 namespace Promethean.CommandHandlers.Handlers
 {
