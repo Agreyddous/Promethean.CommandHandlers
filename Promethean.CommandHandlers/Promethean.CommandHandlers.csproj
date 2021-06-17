@@ -6,12 +6,12 @@
 
 	<ItemGroup>
 		<PackageReference Include="Promethean.Logs" Version="1.0.2" />
-		<PackageReference Include="Promethean.Notifications" Version="1.0.3" />
+		<PackageReference Include="Promethean.Notifications" Version="1.0.4" />
 	</ItemGroup>
 
 	<PropertyGroup>
 		<PackageId>Promethean.CommandHandlers</PackageId>
-		<Version>1.0.5</Version>
+		<Version>1.0.6</Version>
 		<Authors>Nando VBMG</Authors>
 		<Company>Nando VBMG</Company>
 	</PropertyGroup>
