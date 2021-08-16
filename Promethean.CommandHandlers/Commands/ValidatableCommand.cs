@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using Promethean.CommandHandlers.Commands.Contracts;
 using Promethean.Notifications;
-using Promethean.Notifications.Validators;
+using Promethean.Notifications.Extensions;
+using Promethean.Notifications.Validators.Contracts;
 
 namespace Promethean.CommandHandlers.Commands
 {
@@ -15,7 +15,7 @@ namespace Promethean.CommandHandlers.Commands
 		{
 			Validate();
 
-			return Notifications.Select(notification => new ValidationResult(notification.Message, new[] { notification.Property }));
+			return Notifications.AsValidationResult();
 		}
 	}
 }

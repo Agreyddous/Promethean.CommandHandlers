@@ -8,7 +8,7 @@ using Promethean.CommandHandlers.Commands.Results.Contracts;
 using Promethean.CommandHandlers.Enums;
 using Promethean.CommandHandlers.Handlers.Contracts;
 using Promethean.Logs.Services.Contracts;
-using Promethean.Notifications.Contracts;
+using Promethean.Notifications.Messages.Contracts;
 
 namespace Promethean.CommandHandlers.Handlers
 {
@@ -55,7 +55,7 @@ namespace Promethean.CommandHandlers.Handlers
 				{
 					result = new TCommandResult();
 
-					IReadOnlyCollection<INotification> notifications = async ? asyncHandler.Notifications : handler.Notifications;
+					IReadOnlyDictionary<string, IReadOnlyCollection<INotificationMessage>> notifications = async ? asyncHandler.Notifications : handler.Notifications;
 
 					if (notifications.Count > 0)
 						result.Populate(InvalidHandlerDefaultCode, notifications);
